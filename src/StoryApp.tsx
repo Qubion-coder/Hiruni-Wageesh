@@ -70,9 +70,8 @@ export default function StoryApp() {
   };
 
   // Read personalized guest link params
-  const urlParams = new URLSearchParams(window.location.search);
-  const guestPrefix = urlParams.get('prefix');
-  const guestName = urlParams.get('guest');
+  const rawPath = window.location.pathname.substring(1);
+  const displayName = rawPath && rawPath !== 'admin' ? decodeURIComponent(rawPath) : null;
 
   return (
     <>
@@ -136,14 +135,14 @@ export default function StoryApp() {
         />
       </div>
 
-      <div className="snap-container no-scrollbar bg-transparent relative z-10 text-[#063A2C] font-sans">
+      <div className="snap-container no-scrollbar bg-transparent relative z-10 text-[#063A2C] font-sans" style={{ WebkitOverflowScrolling: 'touch' }}>
 
 
 
         {/* --- SCREEN 1: Invite Details --- */}
         <section className="snap-section relative z-10 overflow-hidden bg-transparent">
           <SectionBackground />
-          <div className="absolute inset-0 overflow-y-auto no-scrollbar flex flex-col items-center p-6 text-center">
+          <div className="min-h-[100dvh] flex flex-col items-center p-6 text-center ios-scroll">
             <div className="w-full my-auto flex flex-col items-center justify-center py-10">
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
@@ -151,26 +150,33 @@ export default function StoryApp() {
                 transition={{ duration: 1 }}
                 className="w-full max-w-sm flex flex-col items-center justify-center text-[#063A2C] bg-[#FFFFF0]/85 backdrop-blur-sm p-8 pt-12 mt-12 rounded-t-[10rem] rounded-b-[2rem] border border-[#C5A059] shadow-xl relative"
               >
-                {guestName && (
+                {displayName ? (
                   <motion.div
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.8, duration: 1 }}
-                    className="mb-8 flex flex-col items-center"
+                    className="mb-8 flex flex-col items-center max-w-[280px]"
                   >
-                    <p className="script text-5xl sm:text-6xl text-[#063A2C] drop-shadow-sm mb-3">
-                      Dear {guestPrefix} {guestName},
+                    <p className="serif text-[15px] sm:text-[17px] text-[#063A2C] mb-2 text-center leading-relaxed italic">
+                      We cordially invite
                     </p>
-                    <div className="h-px w-16 bg-[#063A2C]/50"></div>
+                    <p className="serif text-2xl sm:text-3xl text-[#134F40] font-bold mb-2 text-center leading-tight">
+                      {displayName}
+                    </p>
+                    <p className="serif text-[15px] sm:text-[17px] text-[#063A2C] text-center leading-relaxed italic">
+                      to celebrate our special day with us at the
+                    </p>
                   </motion.div>
+                ) : (
+                  <>
+                    <p className="text-[12px] sm:text-sm uppercase tracking-[0.2em] font-medium text-[#063A2C] mb-1">
+                      INVITE YOU TO CELEBRATE
+                    </p>
+                    <p className="text-[12px] sm:text-sm uppercase tracking-[0.2em] font-medium text-[#063A2C] mb-2 sm:mb-4">
+                      THE
+                    </p>
+                  </>
                 )}
-
-                <p className="text-[12px] sm:text-sm uppercase tracking-[0.2em] font-medium text-[#063A2C] mb-1">
-                  INVITE YOU TO CELEBRATE
-                </p>
-                <p className="text-[12px] sm:text-sm uppercase tracking-[0.2em] font-medium text-[#063A2C] mb-2 sm:mb-4">
-                  THE
-                </p>
 
                 <h1 className="script text-7xl sm:text-[5.5rem] text-[#063A2C] mb-8 sm:mb-12 drop-shadow-sm font-normal">
                   Wedding
@@ -224,7 +230,7 @@ export default function StoryApp() {
         {/* --- SCREEN 1.5: Parents --- */}
         <section className="snap-section relative z-10 overflow-hidden">
           <SectionBackground />
-          <div className="absolute inset-0 overflow-y-auto no-scrollbar flex flex-col items-center p-6 text-center">
+          <div className="min-h-[100dvh] flex flex-col items-center p-6 text-center ios-scroll">
             <div className="w-full my-auto flex flex-col items-center justify-center py-10">
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
@@ -264,7 +270,7 @@ export default function StoryApp() {
         {/* --- SCREEN 1.75: Countdown --- */}
         <section className="snap-section relative z-10 overflow-hidden">
           <SectionBackground />
-          <div className="absolute inset-0 overflow-y-auto no-scrollbar flex flex-col items-center p-6 text-center">
+          <div className="min-h-[100dvh] flex flex-col items-center p-6 text-center ios-scroll">
             <div className="w-full my-auto flex flex-col items-center justify-center py-10">
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
@@ -316,7 +322,7 @@ export default function StoryApp() {
 
         {/* --- SCREEN 2: Couple Screen --- */}
         <section className="snap-section relative z-10 overflow-hidden bg-white rounded-t-[2.5rem]">
-          <div className="absolute inset-0 overflow-y-auto no-scrollbar flex flex-col items-center justify-start text-center">
+          <div className="min-h-[100dvh] flex flex-col items-center justify-start text-center ios-scroll">
             <motion.div
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
@@ -351,7 +357,7 @@ export default function StoryApp() {
 
         {/* --- SCREEN 2.5: Our Story --- */}
         <section className="snap-section relative z-10 overflow-hidden bg-[#FFFFF0]">
-          <div className="absolute inset-0 overflow-y-auto no-scrollbar flex flex-col items-center pb-20">
+          <div className="min-h-[100dvh] flex flex-col items-center pb-20 ios-scroll">
 
             {/* Header Image */}
             <div className="w-full h-[45dvh] relative shrink-0">
@@ -422,7 +428,7 @@ export default function StoryApp() {
         {/* --- SCREEN 4: Timeline --- */}
         <section className="snap-section relative z-10 overflow-hidden">
           <SectionBackground />
-          <div className="absolute inset-0 overflow-y-auto no-scrollbar flex flex-col items-center p-6 text-center">
+          <div className="min-h-[100dvh] flex flex-col items-center p-6 text-center ios-scroll">
             <div className="w-full my-auto flex flex-col items-center justify-center py-10">
               <motion.div
                 initial={{ opacity: 0 }}
@@ -467,7 +473,7 @@ export default function StoryApp() {
         {/* --- SCREEN 5: The Details --- */}
         <section className="snap-section relative z-10 overflow-hidden">
           <SectionBackground />
-          <div className="absolute inset-0 overflow-y-auto no-scrollbar flex flex-col items-center p-6 text-center">
+          <div className="min-h-[100dvh] flex flex-col items-center p-6 text-center ios-scroll">
             <div className="w-full my-auto flex flex-col items-center justify-center py-10">
               <motion.div
                 initial={{ opacity: 0 }}
@@ -508,7 +514,7 @@ export default function StoryApp() {
         {/* --- SCREEN 6: RSVP --- */}
         <section className="snap-section relative z-10 overflow-hidden">
           <SectionBackground />
-          <div className="absolute inset-0 overflow-y-auto no-scrollbar flex flex-col items-center p-6 text-center">
+          <div className="min-h-[100dvh] flex flex-col items-center p-6 text-center ios-scroll">
             <div className="w-full my-auto flex flex-col items-center justify-center py-10">
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
@@ -541,7 +547,7 @@ export default function StoryApp() {
         {/* --- SCREEN 7: Wishes --- */}
         <section className="snap-section relative z-10 overflow-hidden">
           <SectionBackground />
-          <div className="absolute inset-0 overflow-y-auto no-scrollbar flex flex-col items-center p-6 text-center">
+          <div className="min-h-[100dvh] flex flex-col items-center p-6 text-center ios-scroll">
             <div className="w-full my-auto flex flex-col items-center justify-center py-10">
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}

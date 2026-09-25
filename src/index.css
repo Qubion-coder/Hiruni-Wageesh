@@ -14,7 +14,7 @@
 
 @theme {
   --font-serif: "Cormorant Garamond", serif;
-  --font-script: "Great Vibes", cursive;
+  --font-script: "Snell Roundhand", "Apple Chancery", "Great Vibes", cursive;
   --font-sans: "Inter", sans-serif;
 
   /* Primary accent — drives all `sage` classes */
@@ -33,10 +33,14 @@
   --color-sienna: #A67C00;
 }
 
-body {
+html, body {
   background-color: var(--color-paper);
   color: #3D2B1F;
   font-family: var(--font-sans);
+  -webkit-overflow-scrolling: touch;
+  overflow-x: hidden;
+  /* Prevent iOS rubber-band on html/body when snap-container handles scroll */
+  overscroll-behavior: none;
 }
 
 .serif {
@@ -106,19 +110,24 @@ body {
   border-radius: 10px;
 }
 
-/* Snap Scrolling Styles */
+/* Snap Scrolling Styles — proximity for iOS compatibility */
 .snap-container {
-  scroll-snap-type: y mandatory;
+  scroll-snap-type: y proximity;
   overflow-y: scroll;
   height: 100dvh;
   width: 100%;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+  touch-action: pan-y;
 }
 
 .snap-section {
   scroll-snap-align: start;
-  scroll-snap-stop: always;
-  height: 100dvh;
+  scroll-snap-stop: normal;
+  min-height: 100dvh;
   width: 100%;
+  /* Allow section to grow if content overflows on small screens */
+  height: auto;
 }
 
 /* Hide scrollbar for seamless story experience */
