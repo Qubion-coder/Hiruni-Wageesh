@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 export default function RSVPForm() {
-  const endpoint = "https://script.google.com/macros/s/AKfycbzc4w6v8wnhgYnma8i9teSZZnkubax2maueTaVp7OL3BP3q4ccVR3GmnBMqC2P9LOFPNA/exec";
+  const endpoint = "https://script.google.com/macros/s/AKfycbzSxEA_ZE75qS8vQe8PEbZTMaB3EiZEZgXqnFaFsLNi_ItxmBxX6M0B0FRklYDg3VMduQ/exec";
 
   const [attendance, setAttendance] = useState<"yes" | "no">("yes");
   const [name, setName] = useState<string>("");
@@ -42,18 +42,23 @@ export default function RSVPForm() {
 
     setSubmitting(true);
     try {
+      // Send as text/plain to completely avoid CORS preflight OPTIONS request blocking
       const res = await fetch(endpoint, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
         body: JSON.stringify(payload),
       });
-      if (!res.ok) throw new Error(String(res.status));
+      
       setSuccessMessage("RSVP saved. Thank you!");
     } catch {
+      // Fallback in case fetch throws a network error
       try {
-        const fd = new FormData();
-        fd.append("payload", JSON.stringify(payload));
-        await fetch(endpoint, { method: "POST", mode: "no-cors", body: fd });
+        await fetch(endpoint, { 
+          method: "POST", 
+          mode: "no-cors", 
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(payload) 
+        });
         setSuccessMessage("RSVP submitted. Thank you!");
       } catch {
         setErrorMessage("Could not submit RSVP. Please try again.");

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 export default function WishesForm() {
-  const endpoint = "https://script.google.com/macros/s/AKfycbzc4w6v8wnhgYnma8i9teSZZnkubax2maueTaVp7OL3BP3q4ccVR3GmnBMqC2P9LOFPNA/exec";
+  const endpoint = "https://script.google.com/macros/s/AKfycbzSxEA_ZE75qS8vQe8PEbZTMaB3EiZEZgXqnFaFsLNi_ItxmBxX6M0B0FRklYDg3VMduQ/exec";
 
   const [name, setName] = useState<string>("");
   const [message, setMessage] = useState<string>("");
@@ -11,9 +11,9 @@ export default function WishesForm() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    // Auto-detect name from URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const guestName = urlParams.get('guest');
+    // Auto-detect name from URL path
+    const rawPath = window.location.pathname.substring(1);
+    const guestName = rawPath && rawPath !== 'admin' ? decodeURIComponent(rawPath) : null;
     if (guestName) {
       setName(guestName);
     }
@@ -54,19 +54,24 @@ export default function WishesForm() {
 
     setSubmitting(true);
     try {
+      // Send as text/plain to completely avoid CORS preflight OPTIONS request blocking
       const res = await fetch(endpoint, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
         body: JSON.stringify(payload),
       });
-      if (!res.ok) throw new Error(String(res.status));
+      
       setSuccessMessage("Your wishes have been saved. Thank you!");
       setMessage(""); // Clear the message on success
     } catch {
+      // Fallback in case fetch throws a network error
       try {
-        const fd = new FormData();
-        fd.append("payload", JSON.stringify(payload));
-        await fetch(endpoint, { method: "POST", mode: "no-cors", body: fd });
+        await fetch(endpoint, { 
+          method: "POST", 
+          mode: "no-cors", 
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(payload) 
+        });
         setSuccessMessage("Your wishes have been submitted. Thank you!");
         setMessage(""); // Clear the message on success
       } catch {
