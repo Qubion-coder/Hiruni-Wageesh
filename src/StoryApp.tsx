@@ -533,7 +533,7 @@ export default function StoryApp() {
                 </div>
 
                 <p className="serif text-[13px] sm:text-[15px] uppercase tracking-[0.15em] font-bold text-[#063A2C] mb-6">
-                  BY NOVEMBER 15, 2026
+                  BY DECEMBER 10, 2026
                 </p>
 
                 <div className="w-full">

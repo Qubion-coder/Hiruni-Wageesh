@@ -11,9 +11,9 @@ export default function RSVPForm() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    // Auto-detect name from URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const guestName = urlParams.get('guest');
+    // Auto-detect name from URL path
+    const rawPath = window.location.pathname.substring(1);
+    const guestName = rawPath && rawPath !== 'admin' ? decodeURIComponent(rawPath) : null;
     if (guestName) {
       setName(guestName);
     }
