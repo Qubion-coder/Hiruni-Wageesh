@@ -33,14 +33,10 @@
   --color-sienna: #A67C00;
 }
 
-html, body {
+body {
   background-color: var(--color-paper);
   color: #3D2B1F;
   font-family: var(--font-sans);
-  -webkit-overflow-scrolling: touch;
-  overflow-x: hidden;
-  /* Prevent iOS rubber-band on html/body when snap-container handles scroll */
-  overscroll-behavior: none;
 }
 
 .serif {
